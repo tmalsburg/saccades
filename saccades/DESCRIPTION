@@ -1,0 +1,11 @@
+Package: saccades
+Type: Package
+Title: Saccade and fixation detection in eyetracking data
+Version: 0.1
+Date: 2014-02-02
+Author: Titus von der Malsburg
+Maintainer: Titus von der Malsburg <malsburg@posteo.de>
+Description: Implements the algorithm for saccade detection proposed by Ralf Engbert and Reinhold Kliegl.
+License: GPL v2
+LazyLoad: yes
+Depends: 
