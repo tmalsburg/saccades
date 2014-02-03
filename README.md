@@ -32,6 +32,16 @@ If you want to play with the package, this is how you get started:
 	4     1 880752009 880823151 59.75037 379.89278  71142
 	5     1 880873375 880873375 21.96000  52.49667      0
 
+If you want to examine the results of the saccade detection visually, you can use the function `diagnostic.plot`:
+
+    > diagnostic.plot(samples, fixations)
+
+This function will open an interactive plot showing the original samples and the detected fixations.  The plot can be used to navigate the whole data set using the mouse or keyboard.  Here's a screenshot:
+
+![Screenshot of diagnostic plot](https://raw.github.com/tmalsburg/saccades/master/Screenshots/diagnostic.plot.png)
+
+The dots are the raw samples, red dots represent the x-coordinate and orange the y-coordinate.  The vertical lines mark the on- and offsets of fixations. The horizontal lines (difficult to see in the screenshot) represent the fixations.
+
 As you can see, there are problems such as fixations with zero duration.  These are single-sample fixations that are an artifact of noise in the velocity profile: the velocity of the eyes falls below the threshold but raises above the threshold in the next sample.  Easy to fix but not done yet.
 
 Other problems: only one eye can be analyzed at a time and there's no blink detection.
