@@ -91,7 +91,7 @@ calculate.summary <- function(fixations, silent=F) {
   stats$mean.trial.duration <- r(mean(tdur))
   stats$sd.trial.duration <- r(sd(tdur))
   message("Duration of trials:\t\t", stats$mean.trial.duration,
-          "ms\t(sd: ", stats$sd.trial.duration, "ms)")
+          "\t(sd: ", stats$sd.trial.duration, ")")
     
   n <- tapply(fixations$start, fixations$trial, length)
   stats$mean.fixations.per.trial <- r(mean(n))
