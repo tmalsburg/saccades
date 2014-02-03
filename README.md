@@ -12,25 +12,25 @@ Things that I plan to add in the future are tools for reading common file format
 If you want to play with the package, this is how you get started:
 
     > library(saccades)
-	> data(eyemovements.raw)
-	> samples <- eyemovements.raw$samples
-	> head(samples)
-				time     x      y trial
-	51 880446504 53.18 375.73     1
-	52 880450686 53.20 375.79     1
-	53 880454885 53.35 376.14     1
-	54 880459060 53.92 376.39     1
-	55 880463239 54.14 376.52     1
-	56 880467426 54.46 376.74     1
-	> fixations <- detect.fixations(samples)
-	> head(fixations[c(1,2,3,4,5,10)])
-	  trial     start       end        x         y    dur
-	0     1 880446504 880517668 53.81296 377.40741  71164
-	1     1 880538588 880538588 35.38333 377.95667      0
-	2     1 880546938 880722726 39.84698 379.65969 175788
-	3     1 880743655 880743655 63.33000 380.37000      0
-	4     1 880752009 880823151 59.75037 379.89278  71142
-	5     1 880873375 880873375 21.96000  52.49667      0
+    > data(eyemovements.raw)
+    > samples <- eyemovements.raw$samples
+    > head(samples)
+            time     x      y trial
+    51 880446504 53.18 375.73     1
+    52 880450686 53.20 375.79     1
+    53 880454885 53.35 376.14     1
+    54 880459060 53.92 376.39     1
+    55 880463239 54.14 376.52     1
+    56 880467426 54.46 376.74     1
+    > fixations <- detect.fixations(samples)
+    > head(fixations[c(1,4,5,10)])
+      trial        x         y    dur
+    0     1 53.81296 377.40741  71164
+    1     1 39.77924 379.62417 179966
+    2     1 59.81702 379.90123  75327
+    3     1 17.74000  58.07833   4184
+    4     1 18.98321  57.22852 108788
+    5     1 41.99289  38.40466 405947
 
 If you want to examine the results of the saccade detection visually, you can use the function `diagnostic.plot`:
 
@@ -40,8 +40,16 @@ This function will open an interactive plot showing the original samples and the
 
 ![Screenshot of diagnostic plot](https://raw.github.com/tmalsburg/saccades/master/Screenshots/diagnostic.plot.png)
 
-The dots are the raw samples, red dots represent the x-coordinate and orange the y-coordinate.  The vertical lines mark the on- and offsets of fixations. The horizontal lines (difficult to see in the screenshot) represent the fixations.
+The dots are the raw samples.  Red dots represent the x-coordinate and orange the y-coordinate.  The vertical lines mark the on- and offsets of fixations. The horizontal lines (difficult to see in the screenshot) represent the fixations.
 
-As you can see, there are problems such as fixations with zero duration.  These are single-sample fixations that are an artifact of noise in the velocity profile: the velocity of the eyes falls below the threshold but raises above the threshold in the next sample.  Easy to fix but not done yet.
+The function `calculate.summary` prints some summary statistics about the detected fixations:
 
-Other problems: only one eye can be analyzed at a time and there's no blink detection.
+    > calculate.summary(fixations)
+    Number of trials:           10
+    Duration of trials:         37015867 (sd: 16513306.69)
+    No. of fixations per trial: 115.2    (sd: 51.44)
+    Duration of fixations:      279046.9 (sd: 399499.66)
+    Dispersion horizontal:      2.15     (sd: 13.18)
+    Dispersion vertical:        1.93     (sd: 8.4)
+    Peak velocity horizontal:   0.15     (sd: 18.08)
+    Peak velocity vertical:     -0.13    (sd: 11.01)
