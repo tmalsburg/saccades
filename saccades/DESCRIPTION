@@ -10,4 +10,4 @@ Description: Implements the algorithm for saccade detection proposed by Ralf
 License: GPL-2
 LazyLoad: yes
 Depends:
-    
+    zoom
