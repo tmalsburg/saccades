@@ -54,6 +54,83 @@ diagnostic.plot <- function(samples, fixations) {
   
 }
 
+#' Calculates some summary statistics for a set of fixations.
+#'
+#' @param fixations a data frame containing the fixations that were
+#' detected in the samples.
+#' @param silent logical.  If true, no statistics are printed.
+#' @section Details: Calculates the number of trials, the average
+#' duration of trials, the average number of fixations in trials, the
+#' average duration of the fixations, the average spatial dispersion
+#' in the fixations, and the average peak velocity that occurred
+#' during fixations.  Where appropriate standard deviations are given
+#' as well.
+#' @return A named list containing the statistics.
+#' @export
+#' @examples
+#' data(eyemovements.raw)
+#' samples <- eyemovements.raw$samples
+#' fixations <- detect.fixations(samples)
+#' calculate.summary(fixations)
+calculate.summary <- function(fixations, silent=F) {
+  
+  message.orig <- message
+  message <- function(...) if(!silent) message.orig(...)
+  
+  f <- function(x) format(x, digits=2)
+  r <- function(x) round(x, digits=2)
+
+  stats <- list()
+
+  stats$trials.with.data <- length(unique(fixations$trial))
+  message("Number of trials:\t\t", stats$trials.with.data)
+
+  s <- tapply(fixations$start, fixations$trial, min)
+  e <- tapply(fixations$end, fixations$trial, max)
+  tdur <- e - s
+  stats$mean.trial.duration <- r(mean(tdur))
+  stats$sd.trial.duration <- r(sd(tdur))
+  message("Duration of trials:\t\t", stats$mean.trial.duration,
+          "ms\t(sd: ", stats$sd.trial.duration, "ms)")
+    
+  n <- tapply(fixations$start, fixations$trial, length)
+  stats$mean.fixations.per.trial <- r(mean(n))
+  stats$sd.fixations.per.trial <- r(sd(n))
+  message("No. of fixations per trial:\t", stats$mean.fixations.per.trial,
+          "\t(sd: ", stats$sd.fixations.per.trial, ")")
+
+  stats$mean.fixation.dur <- r(mean(fixations$dur))
+  stats$sd.fixation.dur <- r(sd(fixations$dur))
+  message("Duration of fixations:\t\t",
+          stats$mean.fixation.dur,
+          "\t(sd: ", stats$sd.fixation.dur, ")")
+
+  stats$mean.dispersion.x <- r(mean(fixations$sd.x, na.rm=T))
+  stats$mean.dispersion.y <- r(mean(fixations$sd.y, na.rm=T))
+  stats$sd.dispersion.x <- r(sd(fixations$sd.x, na.rm=T))
+  stats$sd.dispersion.y <- r(sd(fixations$sd.y, na.rm=T))
+  message("Dispersion horizontal:\t\t",
+          stats$mean.dispersion.x,
+          "\t(sd: ", stats$sd.dispersion.x, ")")
+  message("Dispersion vertical:\t\t",
+          stats$mean.dispersion.y,
+          "\t(sd: ", stats$sd.dispersion.y, ")")
+          
+  stats$mean.peak.vx <- r(mean(fixations$peak.vx, na.rm=T))
+  stats$mean.peak.vy <- r(mean(fixations$peak.vy, na.rm=T))
+  stats$sd.peak.vx <- r(sd(fixations$peak.vx, na.rm=T))
+  stats$sd.peak.vy <- r(sd(fixations$peak.vy, na.rm=T))
+  message("Peak velocity horizontal:\t",
+          stats$mean.peak.vx,
+          "\t(sd: ", stats$sd.peak.vx, ")")
+  message("Peak velocity vertical:\t\t",
+          stats$mean.peak.vy,
+          "\t(sd: ", stats$sd.peak.vy, ")")
+
+  stats
+
+}
+
 zip <- function(...) {
   x <- cbind(...)
   t(x)[1:length(x)]
