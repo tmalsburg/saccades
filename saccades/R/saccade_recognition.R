@@ -17,9 +17,20 @@
 #' detection.  It specifies which multiple of the standard deviation
 #' of the velocity distribution should be used as the detection
 #' threshold.
-#' @param smooth logical. If true the x- and y-coordinates will be
+#' @param smooth.coordinates logical. If true the x- and y-coordinates will be
 #' smoothed using a moving average with window size 3 prior to saccade
 #' detection.
+#' @param smooth.saccades logical.  If true, consecutive saccades that
+#' are separated only by a couple of samples will be joined.  This
+#' avoids the situation where swing-backs at the end of longer
+#' saccades are recognized as separate saccades.  Whether this works
+#' well, depends to some degree on the sampling rate of the
+#' eyetracker.  If the sampling rate is absurdly high, the gaps
+#' between the main saccade and the swing-back might become too large
+#' and look like genuine fixations.  Likewise, if the sampling
+#' frequency is ridiculously low, genuine fixations may be regarded as
+#' spurious.  Both cases are unlikely to occur with current
+#' eyetrackers.
 #' @return data frame containing the detected fixations.  This data
 #' frame has the following columns:
 #'  \item{trial}{the trial to which the fixation belongs}
@@ -45,18 +56,17 @@
 #' first.trial.fixations <- subset(fixations, trial==first.trial)
 #' with(first.trial.samples, plot(x, y, pch=20, cex=0.2, col="red"))
 #' with(first.trial.fixations, points(x, y, cex=1+sqrt(dur/10000)))
-detect.fixations <- function(samples, lambda=10, smooth=T) {
+detect.fixations <- function(samples, lambda=10, smooth.coordinates=T, smooth.saccades=T) {
 
   # Discard unnecessary columns:
   samples <- samples[c("x", "y", "trial", "time")]
 
-  if (smooth) {
+  if (smooth.coordinates) {
     # Keep and reuse original first and last coordinates as they can't
     # be smoothed:
     x <- samples$x[c(1,nrow(samples))]
     y <- samples$y[c(1,nrow(samples))]
-    kernel.size <- smooth*2+1
-    kernel <- rep(1/kernel.size, kernel.size)
+    kernel <- rep(1/3, 3)
     samples$x <- filter(samples$x, kernel)
     samples$y <- filter(samples$y, kernel)
     # Plug in the original values:
@@ -64,7 +74,7 @@ detect.fixations <- function(samples, lambda=10, smooth=T) {
     samples$y[c(1,nrow(samples))] <- y
   }
     
-  samples <- detect.saccades(samples, lambda)
+  samples <- detect.saccades(samples, lambda, smooth.saccades)
   
   if (all(!samples$saccade))
     stop("No saccades were detected.  Something went wrong.")
@@ -122,7 +132,7 @@ aggregate.fixations <- function(samples) {
 #   whether the sample occurred during a saccade or not.
 # - Columns named vx and vy which indicate the horizontal and vertical
 #   speed.
-detect.saccades <- function(samples, lambda) {
+detect.saccades <- function(samples, lambda, smooth.saccades) {
 
   # Calculate horizontal and vertical velocities:
   vx <- filter(samples$x, -1:1/2)
@@ -135,9 +145,6 @@ detect.saccades <- function(samples, lambda) {
   vx[length(vx)] <- vx[length(vx)-1]
   vy[length(vy)] <- vy[length(vy)-1]
 
-  # NOTE: SK takes the sqrt of the following values whereas E&K
-  # don't.  Seems to be a mistake in the paper.
-  
   msdx <- sqrt(median(vx**2, na.rm=T) - median(vx, na.rm=T)**2)
   msdy <- sqrt(median(vy**2, na.rm=T) - median(vy, na.rm=T)**2)
 
@@ -145,6 +152,10 @@ detect.saccades <- function(samples, lambda) {
   radiusy <- msdy * lambda
 
   sacc <- ((vx/radiusx)**2 + (vy/radiusy)**2) > 1
+  if (smooth.saccades) {
+    sacc <- filter(sacc, rep(1/3, 3))
+    sacc <- as.logical(round(sacc))
+  }
   samples$saccade <- ifelse(is.na(sacc), F, sacc)
   samples$vx <- vx
   samples$vy <- vy
