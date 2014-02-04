@@ -17,8 +17,11 @@
 #' @param fixations a data frame containing the fixations that were
 #' detected in the samples.
 #' @section Details: The function will open an interactive plot showing the
-#' samples and fixations.  Instructions for navigating the plot are
-#' displayed on the console.
+#' samples and fixations.  Red dots represent the x-coordinate and
+#' orange dots the y-coordinate.  The gray vertical lines indicate the
+#' on- and offsets of saccades and horizontal lines the coordinates of
+#' the fixations. Instructions for navigating the plot are displayed
+#' on the console.
 #' @return A recording of the final plot.  Can be re-plotted using
 #' \code{replayPlot()}.
 #' @export
