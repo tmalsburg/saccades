@@ -9,6 +9,8 @@ The code in this repository is not for production use as it is under constructio
 
 Things that I plan to add in the future are tools for reading common file formats for eyetracking data and tools for assessing the quality of the fixation detection.  A lot of this code already exists in the old package and I will migrate it in small steps.  For example, we have a parser for EDF files that uses the edf-library provided by SR Research.  That means that this parser is highly efficient and robust.
 
+## Getting started
+
 If you want to play with the package, this is how you get started:
 
     > library(saccades)
@@ -53,3 +55,9 @@ The function `calculate.summary` prints some summary statistics about the detect
     Dispersion vertical:        1.93     (sd: 8.4)
     Peak velocity horizontal:   0.15     (sd: 18.08)
     Peak velocity vertical:     -0.13    (sd: 11.01)
+
+## Blinks
+
+The package currently doesn't offer blink detection.  However, blinks are fairly easy to spot.  In the graph below you can see a blink.  It starts with something that looks like a saccade, then there's a fixation on the coordinates `(0,0)`, and then another saccade (`(0,0)` is what SMI eyetrackers give you when there was track loss).
+
+![A blink](https://raw.github.com/tmalsburg/saccades/master/Screenshots/diagnostic.plot.blink.png)
