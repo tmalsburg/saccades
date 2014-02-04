@@ -1,3 +1,33 @@
+#' Detection of saccades and fixations in raw eyetracking data.
+#'
+#' The main contribution of this package is a function for detecting
+#' fixations in a stream of eye positions.  The detection is done
+#' using an algorithm for saccade detection proposed by Ralf Engbert
+#' and Reinhold Kliegl (see reference below).  Anything that happens
+#' between two saccades is considered to be a fixation.  This software
+#' is therefore not suited for data sets with smooth-pursuit eye
+#' movements.
+#'
+#' Other things available in this package are functions for examining
+#' the performance of the fixation detection and tools for reading
+#' common data formats for eye movement data.
+#'
+#' @name saccades
+#' @docType package
+#' @title Detection of saccades and fixations in raw eyetracking data
+#' @author Titus von der Malsburg \email{malsburg@@posteo.de}
+#' @references
+#' Ralf Engbert, Reinhold Kliegl: Microsaccades uncover the
+#' orientation of covert attention, Vision Research, 2003.
+#'
+#' Titus von der Malsburg, Choice of Saccade Detection Algorithm Has a
+#' Considerable Impact on Eye Tracking Measures, in Proceedings of the
+#' European Conference on Eye Movements, 2009, Southampton.
+#' @keywords eye movements
+#' @seealso \code{\link{detect.fixations}},
+#' \code{\link{diagnostic.plot}}, \code{\link{calculate.summary}}
+
+NULL
 
 #' Takes a data frame containing raw eyetracking samples and returns a
 #' data frame containing fixations.
@@ -56,7 +86,7 @@
 #' first.trial.fixations <- subset(fixations, trial==first.trial)
 #' with(first.trial.samples, plot(x, y, pch=20, cex=0.2, col="red"))
 #' with(first.trial.fixations, points(x, y, cex=1+sqrt(dur/10000)))
-detect.fixations <- function(samples, lambda=10, smooth.coordinates=T, smooth.saccades=T) {
+detect.fixations <- function(samples, lambda=15, smooth.coordinates=T, smooth.saccades=T) {
 
   # Discard unnecessary columns:
   samples <- samples[c("x", "y", "trial", "time")]
