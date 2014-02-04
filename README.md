@@ -38,7 +38,7 @@ If you want to examine the results of the saccade detection visually, you can us
 
 This function will open an interactive plot showing the original samples and the detected fixations.  The plot can be used to navigate the whole data set using the mouse or keyboard.  Here's a screenshot:
 
-![Screenshot of diagnostic plot](https://raw.github.com/tmalsburg/saccades/master/Screenshots/diagnostic.plot.png)
+![Screenshot of diagnostic plot](https://raw.github.com/tmalsburg/saccades/master/Screenshots/diagnostic.plot.smooth.15.png)
 
 The dots are the raw samples.  Red dots represent the x-coordinate and orange the y-coordinate.  The vertical lines mark the on- and offsets of fixations. The horizontal lines (difficult to see in the screenshot) represent the fixations.
 
