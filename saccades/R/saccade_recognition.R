@@ -25,6 +25,32 @@
 
 NULL
 
+#' @name samples
+#' @title Samples of eye positions as recorded with an eyetracker.
+#' @docType data
+#' @usage samples
+#' @format a data frame containing one line per sample.  The samples
+#' are sorted in chronological order.  Time is given in milliseconds,
+#' x- and y-coordinates in screen pixels.
+#' @source Recorded with an iViewX eyetracker by SMI at approximately
+#' 250 Hz.
+#' @author Titus von der Malsburg
+
+NULL
+
+#' @name fixations
+#' @title Fixations detected in a stream of raw positions
+#' @docType data
+#' @usage fixations
+#' @format a data frame containing one line per fixation.  The
+#' fixations are sorted in chronological order.  Time is given in
+#' milliseconds, x- and y-coordinates in screen pixels.
+#' @source Recorded with an iViewX eyetracker by SMI at approximately
+#' 250 Hz.
+#' @author Titus von der Malsburg
+
+NULL
+
 #' Takes a data frame containing raw eyetracking samples and returns a
 #' data frame containing fixations.
 #'
