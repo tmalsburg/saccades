@@ -76,8 +76,7 @@ NULL
 #' @keywords eye movements
 #' @export
 #' @examples
-#' data(eyemovements.raw)
-#' samples <- eyemovements.raw$samples
+#' data(samples)
 #' head(samples)
 #' fixations <- detect.fixations(samples)
 #' head(fixations)

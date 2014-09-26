@@ -27,8 +27,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' data(eyemovements.raw)
-#' samples <- eyemovements.raw$samples
+#' data(samples)
 #' fixations <- detect.fixations(samples)
 #' diagnostic.plot(samples, fixations)
 #' }
@@ -72,9 +71,7 @@ diagnostic.plot <- function(samples, fixations) {
 #' @return A data frame containing the statistics.
 #' @export
 #' @examples
-#' data(eyemovements.raw)
-#' samples <- eyemovements.raw$samples
-#' fixations <- detect.fixations(samples)
+#' data(fixations)
 #' stats <- calculate.summary(fixations)
 #' round(stats, digits=2)
 calculate.summary <- function(fixations) {
