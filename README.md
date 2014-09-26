@@ -14,25 +14,24 @@ Things that I plan to add in the future are tools for reading common file format
 If you want to play with the package, this is how you get started:
 
     > library(saccades)
-    > data(eyemovements.raw)
-    > samples <- eyemovements.raw$samples
+    > data(samples)
     > head(samples)
-            time     x      y trial
-    51 880446504 53.18 375.73     1
-    52 880450686 53.20 375.79     1
-    53 880454885 53.35 376.14     1
-    54 880459060 53.92 376.39     1
-    55 880463239 54.14 376.52     1
-    56 880467426 54.46 376.74     1
+		  time     x      y trial
+	1    0 53.18 375.73     1
+	2    4 53.20 375.79     1
+	3    8 53.35 376.14     1
+	4   12 53.92 376.39     1
+	5   16 54.14 376.52     1
+	6   20 54.46 376.74     1
     > fixations <- detect.fixations(samples)
     > head(fixations[c(1,4,5,10)])
-      trial        x         y    dur
-    0     1 53.81296 377.40741  71164
-    1     1 39.77924 379.62417 179966
-    2     1 59.81702 379.90123  75327
-    3     1 17.74000  58.07833   4184
-    4     1 18.98321  57.22852 108788
-    5     1 41.99289  38.40466 405947
+	  trial        x         y  dur
+	0     1 53.81296 377.40741   71
+	1     1 39.68156 379.58711  184
+	2     1 59.99267 379.92467   79
+	3     1 18.97898  56.94046  147
+	4     1 40.28365  39.03599  980
+	5     1 47.36547  35.39441 1310
 
 If you want to examine the results of the saccade detection visually, you can use the function `diagnostic.plot`:
 
@@ -46,15 +45,17 @@ The dots are the raw samples.  Red dots represent the x-coordinate and orange th
 
 The function `calculate.summary` prints some summary statistics about the detected fixations:
 
-    > calculate.summary(fixations)
-    Number of trials:           10
-    Duration of trials:         37015867 (sd: 16513306.69)
-    No. of fixations per trial: 115.2    (sd: 51.44)
-    Duration of fixations:      279046.9 (sd: 399499.66)
-    Dispersion horizontal:      2.15     (sd: 13.18)
-    Dispersion vertical:        1.93     (sd: 8.4)
-    Peak velocity horizontal:   0.15     (sd: 18.08)
-    Peak velocity vertical:     -0.13    (sd: 11.01)
+    > stats <- calculate.summary(fixations)
+    > round(stats, digits=2)
+                                   mean       sd
+    Number of trials              10.00       NA
+    Duration of trials         37015.70 16513.25
+    No. of fixations per trial    97.00    44.22
+    Duration of fixations        340.00   458.29
+    Dispersion horizontal          2.60    13.16
+    Dispersion vertical            2.31     8.41
+    Peak velocity horizontal       0.06    22.18
+    Peak velocity vertical        -0.16    13.53
 
 ## Blinks
 
