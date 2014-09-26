@@ -1,3 +1,0 @@
-export(calculate.summary)
-export(detect.fixations)
-export(diagnostic.plot)
