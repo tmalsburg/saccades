@@ -61,74 +61,42 @@ diagnostic.plot <- function(samples, fixations) {
 #'
 #' @param fixations a data frame containing the fixations that were
 #' detected in the samples.
-#' @param silent logical.  If true, no statistics are printed.
 #' @section Details: Calculates the number of trials, the average
 #' duration of trials, the average number of fixations in trials, the
 #' average duration of the fixations, the average spatial dispersion
 #' in the fixations, and the average peak velocity that occurred
 #' during fixations.  Where appropriate standard deviations are given
 #' as well.
-#' @return A named list containing the statistics.
+#' @section Details: Use round to obtain a more readable version so
+#' the resulting data frame.  See example below.
+#' @return A data frame containing the statistics.
 #' @export
 #' @examples
 #' data(eyemovements.raw)
 #' samples <- eyemovements.raw$samples
 #' fixations <- detect.fixations(samples)
-#' calculate.summary(fixations)
-calculate.summary <- function(fixations, silent=F) {
+#' stats <- calculate.summary(fixations)
+#' round(stats, digits=2)
+calculate.summary <- function(fixations) {
   
-  message.orig <- message
-  message <- function(...) if(!silent) message.orig(...)
-  
-  f <- function(x) format(x, digits=2)
-  r <- function(x) round(x, digits=2)
+  stats <- data.frame(mean=double(8), sd=double(8), row.names=c("Number of trials", "Duration of trials", "No. of fixations per trial", "Duration of fixations", "Dispersion horizontal", "Dispersion vertical", "Peak velocity horizontal", "Peak velocity vertical"))
 
-  stats <- list()
-
-  stats$trials.with.data <- length(unique(fixations$trial))
-  message("Number of trials:\t\t", stats$trials.with.data)
+  stats["Number of trials",] <- c(length(unique(fixations$trial)), NA)
 
   s <- tapply(fixations$start, fixations$trial, min)
   e <- tapply(fixations$end, fixations$trial, max)
   tdur <- e - s
-  stats$mean.trial.duration <- r(mean(tdur))
-  stats$sd.trial.duration <- r(sd(tdur))
-  message("Duration of trials:\t\t", stats$mean.trial.duration,
-          "\t(sd: ", stats$sd.trial.duration, ")")
+  stats["Duration of trials",] <- c(mean(tdur), sd(tdur))
     
   n <- tapply(fixations$start, fixations$trial, length)
-  stats$mean.fixations.per.trial <- r(mean(n))
-  stats$sd.fixations.per.trial <- r(sd(n))
-  message("No. of fixations per trial:\t", stats$mean.fixations.per.trial,
-          "\t(sd: ", stats$sd.fixations.per.trial, ")")
+  stats["No. of fixations per trial",] <- c(mean(n), sd(n))
+  stats["Duration of fixations",] <- c(mean(fixations$dur), sd(fixations$dur))
 
-  stats$mean.fixation.dur <- r(mean(fixations$dur))
-  stats$sd.fixation.dur <- r(sd(fixations$dur))
-  message("Duration of fixations:\t\t",
-          stats$mean.fixation.dur,
-          "\t(sd: ", stats$sd.fixation.dur, ")")
-
-  stats$mean.dispersion.x <- r(mean(fixations$sd.x, na.rm=T))
-  stats$mean.dispersion.y <- r(mean(fixations$sd.y, na.rm=T))
-  stats$sd.dispersion.x <- r(sd(fixations$sd.x, na.rm=T))
-  stats$sd.dispersion.y <- r(sd(fixations$sd.y, na.rm=T))
-  message("Dispersion horizontal:\t\t",
-          stats$mean.dispersion.x,
-          "\t(sd: ", stats$sd.dispersion.x, ")")
-  message("Dispersion vertical:\t\t",
-          stats$mean.dispersion.y,
-          "\t(sd: ", stats$sd.dispersion.y, ")")
+  stats["Dispersion horizontal",] <- c(mean(fixations$sd.x, na.rm=T), sd(fixations$sd.x, na.rm=T))
+  stats["Dispersion vertical",]   <- c(mean(fixations$sd.y, na.rm=T), sd(fixations$sd.y, na.rm=T))
           
-  stats$mean.peak.vx <- r(mean(fixations$peak.vx, na.rm=T))
-  stats$mean.peak.vy <- r(mean(fixations$peak.vy, na.rm=T))
-  stats$sd.peak.vx <- r(sd(fixations$peak.vx, na.rm=T))
-  stats$sd.peak.vy <- r(sd(fixations$peak.vy, na.rm=T))
-  message("Peak velocity horizontal:\t",
-          stats$mean.peak.vx,
-          "\t(sd: ", stats$sd.peak.vx, ")")
-  message("Peak velocity vertical:\t\t",
-          stats$mean.peak.vy,
-          "\t(sd: ", stats$sd.peak.vy, ")")
+  stats["Peak velocity horizontal",] <- c(mean(fixations$peak.vx, na.rm=T), sd(fixations$peak.vx, na.rm=T))
+  stats["Peak velocity vertical",]   <- c(mean(fixations$peak.vy, na.rm=T), sd(fixations$peak.vy, na.rm=T))
 
   stats
 
