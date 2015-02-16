@@ -1,13 +1,19 @@
 saccades
 ========
 
+## News
+
+- 02/16/2015: saccades is now [available on CRAN](http://cran.uib.no/web/packages/saccades/index.html).
+
+## Overview
+
 An R package for saccade and fixation detection in eyetracking data.  It uses the algorithm for saccade detection proposed by Ralf Engbert and Reinhold Kliegl.  Any period occurring between two saccades is considered to be a fixation. 
 
-This software is a re-implementation of a package that I wrote earlier and that we used heavily in our research.  However, I wrote the old package when I was new to R and many things are clumsy and unnecessarily complex.  Hence, the rewrite.
+This software is a re-implementation of an earlier package that we used heavily in our research.  However, I wrote the old package when I was new to R and the code was somewhat clumsy.  Hence, the rewrite.
 
-The code in this repository is not for production use as it is under construction and largely untested.
+Note that the new code is not tested as much as the earlier package and it may have bugs.  For my data it works beautifully but your mileage may vary.
 
-Things that I plan to add in the future are tools for reading common file formats for eyetracking data and tools for assessing the quality of the fixation detection.  A lot of this code already exists in the old package and I will migrate it in small steps.  For example, we have a parser for EDF files that uses the edf-library provided by SR Research.  That means that this parser is highly efficient and robust.
+Things that I plan to add in the future are tools for reading common file formats for eyetracking data and tools for assessing the quality of the fixation detection.  A lot of this code already exists in the old package and I will migrate it in small steps.  For example, we have a highly efficient parser for EDF files that uses the edf-library provided by SR Research.
 
 ## Getting started
 
