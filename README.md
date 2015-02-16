@@ -1,5 +1,4 @@
-saccades
-========
+# Saccade and Fixation Detection in R
 
 ## News
 
