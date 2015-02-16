@@ -1,62 +1,67 @@
-#' Detection of fixations in raw eyetracking data.
+#' Functions for the detection of fixations in raw eye-tracking data.
 #'
-#' This package offers a function for detecting fixations in the
-#' stream of eye positions recorded by an eyetracker.  The detection
-#' is done using an algorithm for saccade detection proposed by Ralf
-#' Engbert and Reinhold Kliegl (see reference below).  Anything that
-#' happens between two saccades is considered to be a fixation.  This
-#' software is therefore not suited for data sets with smooth-pursuit
-#' eye movements.
+#' Offers a function for detecting fixations in a stream of eye
+#' positions recorded by an eye-tracker.  The detection is done using
+#' an algorithm for saccade detection proposed by Ralf Engbert and
+#' Reinhold Kliegl (see reference below).  Anything that happens
+#' between two saccades is considered to be a fixation.  This software
+#' is therefore not suited for data sets with smooth-pursuit eye
+#' movements.
 #'
 #' @name saccades
 #' @docType package
-#' @title Detection of fixations in raw eyetracking data
+#' @title Detection of Fixations in Raw Eye-Tracking Data
 #' @author Titus von der Malsburg \email{malsburg@@posteo.de}
 #' @references
 #' Ralf Engbert, Reinhold Kliegl: Microsaccades uncover the
 #' orientation of covert attention, Vision Research, 2003.
-#'
-#' Titus von der Malsburg, Choice of saccade detection algorithm has a
-#' considerable impact on eye tracking measures, in Proceedings of the
-#' European Conference on Eye Movements, 2009, Southampton.
+#' @importFrom zoom zm
 #' @keywords manip ts classif
 #' @seealso \code{\link{detect.fixations}},
 #' \code{\link{diagnostic.plot}}, \code{\link{calculate.summary}}
 
 NULL
 
+#' Samples of eye positions as recorded with an iViewX eye-tracker
+#' recording at approx. 250 Hz.  The data quality is low on purpose
+#' and contains episodes of track-loss and blinks.
+#'
 #' @name samples
-#' @title Samples of eye positions as recorded with an eyetracker.
+#' @title Samples of Eye Positions as Recorded with an Eye-Tracker
 #' @docType data
 #' @usage samples
 #' @format a data frame containing one line per sample.  The samples
 #' are sorted in chronological order.  Time is given in milliseconds,
 #' x- and y-coordinates in screen pixels.
-#' @source Recorded with an iViewX eyetracker by SMI at approximately
+#' @source Recorded with an iViewX Eye-Tracker by SMI at approximately
 #' 250 Hz.
-#' @author Titus von der Malsburg
+#' @author Titus von der Malsburg \email{malsburg@@posteo.de}
 
 NULL
 
+#' Fixations detected in a stream of raw eye positions.  The
+#' corresponding raw eye positions samples are found in the data frame
+#' \code{\link{samples}} also part of this package.
+#'
 #' @name fixations
-#' @title Fixations detected in a stream of raw positions
+#' @title Fixations Detected in a Stream of Raw Positions
 #' @docType data
 #' @usage fixations
 #' @format a data frame containing one line per fixation.  The
 #' fixations are sorted in chronological order.  Time is given in
 #' milliseconds, x- and y-coordinates in screen pixels.
-#' @source Recorded with an iViewX eyetracker by SMI at approximately
+#' @source Recorded with an iViewX Eye-Tracker by SMI at approximately
 #' 250 Hz.
-#' @author Titus von der Malsburg
+#' @author Titus von der Malsburg \email{malsburg@@posteo.de}
 
 NULL
 
-#' Takes a data frame containing raw eyetracking samples and returns a
+#' Takes a data frame containing raw eye-tracking samples and returns a
 #' data frame containing fixations.
 #'
-#' @title Detect fixations in a stream of raw eyetracking samples
+#' @title Detect Fixations in a Stream of Raw Eye-Tracking Samples
 #' @param samples a data frame containing the raw samples as recorded
-#' by the eyetracker.  This data frame has four columns:
+#' by the eye-tracker.  This data frame has four columns:
 #' \describe{
 #'  \item{time:}{the time at which the sample was recorded}
 #'  \item{trial:}{the trial to which the sample belongs}
@@ -73,17 +78,21 @@ NULL
 #' smoothed using a moving average with window size 3 prior to saccade
 #' detection.
 #' @param smooth.saccades logical.  If true, consecutive saccades that
-#' are separated only by a couple of samples will be joined.  This
-#' avoids the situation where swing-backs at the end of longer
-#' saccades are recognized as separate saccades.  Whether this works
-#' well, depends to some degree on the sampling rate of the
-#' eyetracker.  If the sampling rate is absurdly high, the gaps
-#' between the main saccade and the swing-back might become too large
-#' and look like genuine fixations.  Likewise, if the sampling
-#' frequency is ridiculously low, genuine fixations may be regarded as
-#' spurious.  Both cases are unlikely to occur with current
-#' eyetrackers.
-#' @return data frame containing the detected fixations.  This data
+#' are separated only by a few samples will be joined.  This avoids
+#' the situation where swing-backs at the end of longer saccades are
+#' recognized as separate saccades.  Whether this works well, depends
+#' to some degree on the sampling rate of the eye-tracker.  If the
+#' sampling rate is very high, the gaps between the main saccade and
+#' the swing-back might become too large and look like genuine
+#' fixations.  Likewise, if the sampling frequency is very low,
+#' genuine fixations may be regarded as spurious.  Both cases are
+#' unlikely to occur with current eye-trackers.
+#' @section Details: This function uses a velocity-based detection
+#' algorithm for saccades proposed by Engbert and Kliegl.  Anything
+#' between two saccades is considered to be a fixation.  Thus, the
+#' algorithm is not suitable for data sets containing episodes of
+#' smooth pursuit eye movements.
+#' @return a data frame containing the detected fixations.  This data
 #' frame has the following columns:
 #'  \item{trial}{the trial to which the fixation belongs}
 #'  \item{start}{the time at which the fixation started}
@@ -95,18 +104,26 @@ NULL
 #'  \item{peak.vx}{the horizontal peak velocity that was reached within the fixation}
 #'  \item{peak.vy}{the vertical peak velocity that was reached within the fixation}
 #'  \item{dur}{the duration of the fixation}
-#' @keywords eye movements
+#' @author Titus von der Malsburg \email{malsburg@@posteo.de}
+#' @references
+#' Ralf Engbert, Reinhold Kliegl: Microsaccades uncover the
+#' orientation of covert attention, Vision Research, 2003.
+#' @keywords manip ts classif
+#' @seealso \code{\link{diagnostic.plot}},
+#' \code{\link{calculate.summary}}
 #' @export
 #' @examples
 #' data(samples)
 #' head(samples)
 #' fixations <- detect.fixations(samples)
 #' head(fixations)
+#' \dontrun{
 #' first.trial <- samples$trial[1]
 #' first.trial.samples <- subset(samples, trial==first.trial)
 #' first.trial.fixations <- subset(fixations, trial==first.trial)
 #' with(first.trial.samples, plot(x, y, pch=20, cex=0.2, col="red"))
 #' with(first.trial.fixations, points(x, y, cex=1+sqrt(dur/10000)))
+#' }
 detect.fixations <- function(samples, lambda=15, smooth.coordinates=T, smooth.saccades=T) {
 
   # Discard unnecessary columns:

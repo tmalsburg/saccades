@@ -1,13 +1,18 @@
 Package: saccades
 Type: Package
-Title: Detect fixations in eyetracking data
+Title: Detection of Fixations in Eye-Tracking Data
 Version: 0.1
-Date: 2014-09-26
+Date: 2014-09-30
 Authors@R: c(person("Titus", "von der Malsburg", email="malsburg@posteo.de",
     role=c("aut", "cph", "cre")))
-Maintainer: Titus von der Malsburg <malsburg@posteo.de>
-Description: Uses the velocity-based algorithm for saccade detection by Ralf
-    Engbert and Reinhold Kliegl.
+Description: Functions for detecting eye fixations in raw eye-tracking
+    data.  The detection is done using a velocity-based algorithm for
+    saccade detection proposed by Ralf Engbert and Reinhold Kliegl in
+    2003.  The algorithm labels segments as saccades when the velocity of
+    the eye movement exceeds a certain threshold.  Anything between two
+    saccades is considered a fixation.  Thus the algorithm is not
+    appropriate for data containing episodes of smooth pursuit eye
+    movements.
 License: GPL-2
 URL: https://github.com/tmalsburg/saccades
 BugReports: https://github.com/tmalsburg/saccades/issues

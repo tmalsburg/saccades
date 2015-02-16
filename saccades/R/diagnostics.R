@@ -3,19 +3,26 @@
 #' plot.  This plot can be used to screen the data and to diagnose
 #' problems with the fixation detection.
 #'
-#' @title Interactive diagnostic plot of samples and fixations
+#' @title Interactive Diagnostic Plot of Samples and Fixations
 #' @param samples a data frame containing the raw samples as recorded
-#' by the eyetracker.  This data frame has four columns:
+#' by the eye-tracker.  This data frame has to have the following
+#' columns:
 #' \describe{
 #'  \item{time:}{the time at which the sample was recorded}
-#'  \item{trial:}{the trial to which the sample belongs}
 #'  \item{x:}{the x-coordinate of the sample}
 #'  \item{y:}{the y-coordinate of the sample}
 #' }
 #' Samples have to be listed in chronological order.  The velocity
 #' calculations assume that the sampling frequency is constant.
 #' @param fixations a data frame containing the fixations that were
-#' detected in the samples.
+#' detected in the samples.  This data frame has to have the following
+#' columns:
+#' \describe{
+#'  \item{start:}{the time at which the fixations started}
+#'  \item{end:}{the time at which the fixation ended}
+#'  \item{x:}{the x-coordinate of the fixation}
+#'  \item{y:}{the y-coordinate of the fixation}
+#' }
 #' @section Details: The function will open an interactive plot showing the
 #' samples and fixations.  Red dots represent the x-coordinate and
 #' orange dots the y-coordinate.  The gray vertical lines indicate the
@@ -23,7 +30,10 @@
 #' the fixations. Instructions for navigating the plot are displayed
 #' on the console.
 #' @return A recording of the final plot.  Can be re-plotted using
-#' \code{replayPlot()}.
+#' \code{\link[grDevices]{replayPlot}}.
+#' @author Titus von der Malsburg \email{malsburg@@posteo.de}
+#' @seealso \code{\link{detect.fixations}},
+#' \code{\link{calculate.summary}}
 #' @export
 #' @examples
 #' \dontrun{
@@ -41,8 +51,9 @@ diagnostic.plot <- function(samples, fixations) {
   gmaxxy <- max(samples$x, samples$y)
   gminxy <- min(samples$x, samples$y)
   
-  X11(type="Xlib")
+  dev.new()
   par(mar=c(2,2,0,0))
+  
   with(samples, plot(time, x, pch=20, cex=0.3, col="red",
                      ylim=c(minxy, maxxy),
                      xlim=c(f$start[1], f$start[20])))
@@ -52,23 +63,33 @@ diagnostic.plot <- function(samples, fixations) {
   with(f, lines(zip(start, start, NA), rep(c(gminxy,gmaxxy,NA), n), col="lightgrey"))
   with(f, lines(zip(end, end, NA), rep(c(gminxy,gmaxxy,NA), n), col="lightgrey"))
 
-  zm()
+  p <- recordPlot()
+  dev.off()
+
+  zm(rp=p)
   
 }
 
-#' Calculates some summary statistics for a set of fixations.
+#' Calculates summary statistics about the trials and fixations in the
+#' given data frame.
+#'
+#' @title Calculate Summary Statistics for a Set of Fixations.
 #'
 #' @param fixations a data frame containing the fixations that were
-#' detected in the samples.
+#' detected in the samples.  See
+#' \code{\link[saccades]{detect.fixations}} for details about the
+#' format.
 #' @section Details: Calculates the number of trials, the average
 #' duration of trials, the average number of fixations in trials, the
 #' average duration of the fixations, the average spatial dispersion
 #' in the fixations, and the average peak velocity that occurred
 #' during fixations.  Where appropriate standard deviations are given
-#' as well.
-#' @section Details: Use round to obtain a more readable version so
-#' the resulting data frame.  See example below.
+#' as well.  Use round to obtain a more readable version of
+#' the resulting data frame.
 #' @return A data frame containing the statistics.
+#' @author Titus von der Malsburg \email{malsburg@@posteo.de}
+#' @seealso \code{\link{diagnostic.plot}},
+#' \code{\link{detect.fixations}}
 #' @export
 #' @examples
 #' data(fixations)
