@@ -14,6 +14,16 @@ Note that the new code is not tested as much as the earlier package and it may h
 
 Things that I plan to add in the future are tools for reading common file formats for eyetracking data and tools for assessing the quality of the fixation detection.  A lot of this code already exists in the old package and I will migrate it in small steps.  For example, we have a highly efficient parser for EDF files that uses the edf-library provided by SR Research.
 
+## Build and install package
+
+These instructions assume that you are on a Linux or OSX system.  To build the package execute the following command in the root directory of the git repository:
+
+    make build
+
+This creates the file `saccades_0.1.tar.gz` which can be installed with this command:
+
+    sudo R CMD INSTALL saccades_0.1.tar.gz
+
 ## Getting started
 
 If you want to play with the package, this is how you get started:
