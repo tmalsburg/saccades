@@ -135,8 +135,8 @@ detect.fixations <- function(samples, lambda=15, smooth.coordinates=T, smooth.sa
     x <- samples$x[c(1,nrow(samples))]
     y <- samples$y[c(1,nrow(samples))]
     kernel <- rep(1/3, 3)
-    samples$x <- filter(samples$x, kernel)
-    samples$y <- filter(samples$y, kernel)
+    samples$x <- stats::filter(samples$x, kernel)
+    samples$y <- stats::filter(samples$y, kernel)
     # Plug in the original values:
     samples$x[c(1,nrow(samples))] <- x
     samples$y[c(1,nrow(samples))] <- y
@@ -203,8 +203,8 @@ aggregate.fixations <- function(samples) {
 detect.saccades <- function(samples, lambda, smooth.saccades) {
 
   # Calculate horizontal and vertical velocities:
-  vx <- filter(samples$x, -1:1/2)
-  vy <- filter(samples$y, -1:1/2)
+  vx <- stats::filter(samples$x, -1:1/2)
+  vy <- stats::filter(samples$y, -1:1/2)
 
   # We don't want NAs, as they make our life difficult later
   # on.  Therefore, fill in missing values:
@@ -221,7 +221,7 @@ detect.saccades <- function(samples, lambda, smooth.saccades) {
 
   sacc <- ((vx/radiusx)**2 + (vy/radiusy)**2) > 1
   if (smooth.saccades) {
-    sacc <- filter(sacc, rep(1/3, 3))
+    sacc <- stats::filter(sacc, rep(1/3, 3))
     sacc <- as.logical(round(sacc))
   }
   samples$saccade <- ifelse(is.na(sacc), F, sacc)
