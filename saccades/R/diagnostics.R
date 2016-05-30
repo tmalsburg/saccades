@@ -45,18 +45,18 @@ diagnostic.plot <- function(samples, fixations) {
 
   f <- fixations
   n <- nrow(f)
-
-  maxxy <- max(f[1:20,]$x, f[1:20,]$y)
-  minxy <- min(f[1:20,]$x, f[1:20,]$y)
+  m <- min(n, 20)
+  maxxy <- max(f[1:m,]$x, f[1:m,]$y)
+  minxy <- min(f[1:m,]$x, f[1:m,]$y)
   gmaxxy <- max(samples$x, samples$y)
   gminxy <- min(samples$x, samples$y)
   
   dev.new()
   par(mar=c(2,2,0,0))
-  
+
   with(samples, plot(time, x, pch=20, cex=0.3, col="red",
                      ylim=c(minxy, maxxy),
-                     xlim=c(f$start[1], f$start[20])))
+                     xlim=c(f$start[1], f$start[m])))
   with(samples, points(time, y, pch=20, cex=0.3, col="orange"))
   with(f, lines(zip(start, end, NA), rep(x,each=3)))
   with(f, lines(zip(start, end, NA), rep(y,each=3)))
