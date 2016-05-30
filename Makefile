@@ -9,7 +9,7 @@ saccades_0.1.tar.gz: documentation saccades/R/saccade_recognition.R saccades/R/d
 check: saccades.Rcheck/00check.log documentation
 
 saccades.Rcheck/00check.log: saccades_0.1.tar.gz
-	R CMD check saccades_0.1.tar.gz
+	R CMD check --as-cran saccades_0.1.tar.gz
 
 install: check
-	R CMD INSTALL saccades_0.1.tar.gz
+	sudo R CMD INSTALL saccades_0.1.tar.gz
