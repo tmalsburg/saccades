@@ -19,3 +19,4 @@ BugReports: https://github.com/tmalsburg/saccades/issues
 Depends:
     R (>= 2.10),
     zoom
+RoxygenNote: 6.1.0

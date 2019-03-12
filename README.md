@@ -18,13 +18,13 @@ Things that I plan to add in the future are tools for reading common file format
 
 ## Build and install package
 
-These instructions assume that you are on a Linux or OSX system.  To build the package execute the following command in the root directory of the git repository:
+These instructions assume that you are on a Linux or OSX system.  To build the package you first have to install the R pacakge ~zoom~ which is used for interactive diagnostic plots.  Then execute the following command in the root directory of the git repository:
 
     make build
 
-This creates the file `saccades_0.1.tar.gz` which can be installed with this command:
+This creates the file `saccades_0.1-1.tar.gz` which can then be installed with this command:
 
-    sudo R CMD INSTALL saccades_0.1.tar.gz
+    sudo R CMD INSTALL saccades_0.1-1.tar.gz
 
 ## Getting started
 
