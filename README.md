@@ -16,15 +16,14 @@ Note that the new code is not tested as much as the earlier package and it may h
 
 Things that I plan to add in the future are tools for reading common file formats for eyetracking data and tools for assessing the quality of the fixation detection.  A lot of this code already exists in the old package and I will migrate it in small steps.  For example, we have a highly efficient parser for EDF files that uses the edf-library provided by SR Research.
 
-## Build and install package
+## Install package
 
-These instructions assume that you are on a Linux or OSX system.  To build the package you first have to install the R pacakge ~zoom~ which is used for interactive diagnostic plots.  Then execute the following command in the root directory of the git repository:
+To install the latest version of the package, execute the following two lines in R:
 
-    make build
+    library("devtools")
+    install_github("tmalsburg/saccades/saccades", dependencies=TRUE)
 
-This creates the file `saccades_0.1-1.tar.gz` which can then be installed with this command:
-
-    sudo R CMD INSTALL saccades_0.1-1.tar.gz
+Note that this package depends on the R pacakge ~zoom~ which will be automatically installed with the commands above.
 
 ## Getting started
 
