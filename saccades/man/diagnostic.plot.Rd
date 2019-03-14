@@ -4,7 +4,8 @@
 \alias{diagnostic.plot}
 \title{Interactive Diagnostic Plot of Samples and Fixations}
 \usage{
-diagnostic.plot(samples, fixations)
+diagnostic.plot(samples, fixations, start.event = 1, start.time = NULL,
+  duration = 2000, interactive = TRUE)
 }
 \arguments{
 \item{samples}{a data frame containing the raw samples as recorded
@@ -27,6 +28,17 @@ columns:
  \item{x:}{the x-coordinate of the fixation}
  \item{y:}{the y-coordinate of the fixation}
 }}
+
+\item{start.event}{the number of the event at which the displayed
+segment starts.  Could be a fixation, blink, or artifact.}
+
+\item{start.time}{the time at which the displayed segment
+starts.  Alternative to \code{start.event}.}
+
+\item{duration}{the duration of the displayed segment.}
+
+\item{interactive}{indicates whether an interactive plot will be
+displayed or an ordinary plot.}
 }
 \value{
 A recording of the final plot.  Can be re-plotted using

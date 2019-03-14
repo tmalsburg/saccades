@@ -4,8 +4,8 @@
 \alias{detect.fixations}
 \title{Detect Fixations in a Stream of Raw Eye-Tracking Samples}
 \usage{
-detect.fixations(samples, lambda = 15, smooth.coordinates = T,
-  smooth.saccades = T)
+detect.fixations(samples, lambda = 15, smooth.coordinates = FALSE,
+  smooth.saccades = TRUE)
 }
 \arguments{
 \item{samples}{a data frame containing the raw samples as recorded
