@@ -174,20 +174,23 @@ label.blinks.artifacts <- function(fixations) {
   # Dispersion too low -> blink:
   threshold.lsdx <- median.lsdx - 4 * mad.lsdx
   threshold.lsdy <- median.lsdy - 4 * mad.lsdy
-  event <- ifelse((lsdx < threshold.lsdx) & (lsdy < threshold.lsdy),
+  event <- ifelse((!is.na(lsdx) & lsdx < threshold.lsdx) &
+                  (!is.na(lsdy) & lsdy < threshold.lsdy),
                   "blink", "fixation")
 
   # Dispersion too high -> artifact:
   threshold.lsdx <- median.lsdx + 4 * mad.lsdx
   threshold.lsdy <- median.lsdy + 4 * mad.lsdy
-  event <- ifelse(lsdx > threshold.lsdx & lsdy > threshold.lsdy,
+  event <- ifelse((!is.na(lsdx) & lsdx > threshold.lsdx) &
+                  (!is.na(lsdy) & lsdy > threshold.lsdy),
                   "too dispersed", event)
 
   # Artifact detection based on duration:
-  # Duration too short -> artifact:
   dur <- 1/fixations$dur
   median.dur <- stats::median(dur, na.rm=TRUE)
   mad.dur <- stats::mad(dur, na.rm=TRUE)
+
+  # Duration too short -> artifact:
   threshold.dur <- median.dur + mad.dur * 5
   event <- ifelse(event!="blink" & dur > threshold.dur, "too short", event)
 
