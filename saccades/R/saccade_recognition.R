@@ -203,8 +203,8 @@ label.blinks.artifacts <- function(fixations) {
 aggregate.fixations <- function(samples) {
     
   # In saccade.events a 1 marks the start of a saccade and a -1 the
-  # end of a saccade.
-    
+  # start of a fixation.
+
   saccade.events <- sign(c(0, diff(samples$saccade)))
 
   trial.numeric  <- as.integer(factor(samples$trial))
@@ -213,6 +213,9 @@ aggregate.fixations <- function(samples) {
   # New fixations start either when a saccade ends or when a trial
   # ends:
   samples$fixation.id <- cumsum(saccade.events==-1|trial.events==1)
+  samples$t2 <- samples$time
+  samples$t2 <- ifelse(trial.events==1, NA, samples$t2)
+  samples$t2 <- samples$t2[2:(nrow(samples)+1)]
   
   # Discard samples that occurred during saccades:
   samples <- samples[!samples$saccade,,drop=FALSE]
@@ -220,7 +223,7 @@ aggregate.fixations <- function(samples) {
   fixations <- with(samples, data.frame(
     trial   = tapply(trial, fixation.id, function(x) x[1]),
     start   = tapply(time,  fixation.id, min),
-    end     = tapply(time,  fixation.id, max),
+    end     = tapply(t2,    fixation.id, function(x) max(x, na.rm=TRUE)),
     x       = tapply(x,     fixation.id, mean),
     y       = tapply(y,     fixation.id, mean),
     sd.x    = tapply(x,     fixation.id, sd),
@@ -234,7 +237,6 @@ aggregate.fixations <- function(samples) {
   fixations
   
 }
-
 
 # Implementation of the Engbert & Kliegl algorithm for the
 # detection of saccades.  This function takes a data frame of the

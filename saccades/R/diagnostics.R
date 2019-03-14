@@ -79,7 +79,8 @@ diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, 
 }
 
 # Pairs plot using fixation x- and y-dispersion and duration and color
-# for detected event type (black=fixation, red=blink, green=artifact).
+# for detected event type (black=fixation, red=blink, blue=too short,
+# green=too dispersed).
 diagnostic.plot.event.types <- function(fixations) {
   graphics::pairs( ~ log10(sd.x+0.001) + log10(sd.y+0.001) + log10(dur),
         data=fixations,
