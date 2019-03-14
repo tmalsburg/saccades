@@ -166,10 +166,10 @@ label.blinks.artifacts <- function(fixations) {
   # Blink and artifact detection based on dispersion:
   lsdx <- log10(fixations$sd.x)
   lsdy <- log10(fixations$sd.y)
-  median.lsdx <- median(lsdx, na.rm=TRUE)
-  median.lsdy <- median(lsdy, na.rm=TRUE)
-  mad.lsdx <- mad(lsdx, na.rm=TRUE)
-  mad.lsdy <- mad(lsdy, na.rm=TRUE)
+  median.lsdx <- stats::median(lsdx, na.rm=TRUE)
+  median.lsdy <- stats::median(lsdy, na.rm=TRUE)
+  mad.lsdx <- stats::mad(lsdx, na.rm=TRUE)
+  mad.lsdy <- stats::mad(lsdy, na.rm=TRUE)
 
   # Dispersion too low -> blink:
   threshold.lsdx <- median.lsdx - 4 * mad.lsdx
@@ -186,8 +186,8 @@ label.blinks.artifacts <- function(fixations) {
   # Artifact detection based on duration:
   # Duration too short -> artifact:
   dur <- 1/fixations$dur
-  median.dur <- median(dur, na.rm=TRUE)
-  mad.dur <- mad(dur, na.rm=TRUE)
+  median.dur <- stats::median(dur, na.rm=TRUE)
+  mad.dur <- stats::mad(dur, na.rm=TRUE)
   threshold.dur <- median.dur + mad.dur * 5
   event <- ifelse(event!="blink" & dur > threshold.dur, "too short", event)
 
@@ -254,8 +254,8 @@ detect.saccades <- function(samples, lambda, smooth.saccades) {
   vx[length(vx)] <- vx[length(vx)-1]
   vy[length(vy)] <- vy[length(vy)-1]
 
-  msdx <- sqrt(median(vx**2, na.rm=TRUE) - median(vx, na.rm=TRUE)**2)
-  msdy <- sqrt(median(vy**2, na.rm=TRUE) - median(vy, na.rm=TRUE)**2)
+  msdx <- sqrt(stats::median(vx**2, na.rm=TRUE) - stats::median(vx, na.rm=TRUE)**2)
+  msdy <- sqrt(stats::median(vy**2, na.rm=TRUE) - stats::median(vy, na.rm=TRUE)**2)
 
   radiusx <- msdx * lambda
   radiusy <- msdy * lambda

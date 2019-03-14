@@ -58,8 +58,9 @@ diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, 
   if (is.null(start.time))
     start.time <- fixations$start[start.event]
 
+  if (interactive) grDevices::dev.new()
 
-  par(mar=c(2,2,0,0))
+  graphics::par(mar=c(2,2,0,0))
   with(samples,   plot(time, x, pch=20, cex=0.3, col="red",
                        ylim=c(min(fixations$x, fixations$y),
                               max(fixations$x, fixations$y)),
@@ -70,9 +71,9 @@ diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, 
   with(fixations, abline(v=c(start, end), col="lightgrey"))
   
   if (interactive) {
-    p <- recordPlot()
-    dev.off()
-    zm(rp=p)
+    p <- grDevices::recordPlot()
+    grDevices::dev.off()
+    zoom::zm(rp=p)
   }
 
 }
@@ -80,7 +81,7 @@ diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, 
 # Pairs plot using fixation x- and y-dispersion and duration and color
 # for detected event type (black=fixation, red=blink, green=artifact).
 diagnostic.plot.event.types <- function(fixations) {
-  pairs( ~ log10(sd.x+0.001) + log10(sd.y+0.001) + log10(dur),
+  graphics::pairs( ~ log10(sd.x+0.001) + log10(sd.y+0.001) + log10(dur),
         data=fixations,
         col=fixations$event)
 }
@@ -119,17 +120,17 @@ calculate.summary <- function(fixations) {
   s <- tapply(fixations$start, fixations$trial, min)
   e <- tapply(fixations$end, fixations$trial, max)
   tdur <- e - s
-  stats["Duration of trials",] <- c(mean(tdur), sd(tdur))
+  stats["Duration of trials",] <- c(mean(tdur), stats::sd(tdur))
     
   n <- tapply(fixations$start, fixations$trial, length)
-  stats["No. of fixations per trial",] <- c(mean(n), sd(n))
-  stats["Duration of fixations",] <- c(mean(fixations$dur), sd(fixations$dur))
+  stats["No. of fixations per trial",] <- c(mean(n), stats::sd(n))
+  stats["Duration of fixations",] <- c(mean(fixations$dur), stats::sd(fixations$dur))
 
-  stats["Dispersion horizontal",] <- c(mean(fixations$sd.x, na.rm=T), sd(fixations$sd.x, na.rm=T))
-  stats["Dispersion vertical",]   <- c(mean(fixations$sd.y, na.rm=T), sd(fixations$sd.y, na.rm=T))
+  stats["Dispersion horizontal",] <- c(mean(fixations$sd.x, na.rm=T), stats::sd(fixations$sd.x, na.rm=T))
+  stats["Dispersion vertical",]   <- c(mean(fixations$sd.y, na.rm=T), stats::sd(fixations$sd.y, na.rm=T))
           
-  stats["Peak velocity horizontal",] <- c(mean(fixations$peak.vx, na.rm=T), sd(fixations$peak.vx, na.rm=T))
-  stats["Peak velocity vertical",]   <- c(mean(fixations$peak.vy, na.rm=T), sd(fixations$peak.vy, na.rm=T))
+  stats["Peak velocity horizontal",] <- c(mean(fixations$peak.vx, na.rm=T), stats::sd(fixations$peak.vx, na.rm=T))
+  stats["Peak velocity vertical",]   <- c(mean(fixations$peak.vy, na.rm=T), stats::sd(fixations$peak.vy, na.rm=T))
 
   stats
 
