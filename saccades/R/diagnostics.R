@@ -23,6 +23,13 @@
 #'  \item{x:}{the x-coordinate of the fixation}
 #'  \item{y:}{the y-coordinate of the fixation}
 #' }
+#' @param start.event the number of the event at which the displayed
+#'   segment starts.  Could be a fixation, blink, or artifact.
+#' @param start.time the time at which the displayed segment
+#'   starts.  Alternative to \code{start.event}.
+#' @param duration the duration of the displayed segment.
+#' @param interactive indicates whether an interactive plot will be
+#'   displayed or an ordinary plot.
 #' @section Details: The function will open an interactive plot showing the
 #' samples and fixations.  Red dots represent the x-coordinate and
 #' orange dots the y-coordinate.  The gray vertical lines indicate the
@@ -41,7 +48,7 @@
 #' fixations <- detect.fixations(samples)
 #' diagnostic.plot(samples, fixations)
 #' }
-diagnostic.plot <- function(samples, fixations, start.fixation=1, start.time=NULL, duration=2000, interactive=TRUE) {
+diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, duration=2000, interactive=TRUE) {
 
   stopifnot(start.fixation >= 1)
   stopifnot(start.fixation <= nrow(fixations))
