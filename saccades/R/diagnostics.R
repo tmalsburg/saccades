@@ -50,15 +50,14 @@
 #' }
 diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, duration=2000, interactive=TRUE) {
 
-  stopifnot(start.fixation >= 1)
-  stopifnot(start.fixation <= nrow(fixations))
-  stopifnot(start.time     >= min(samples$time))
-  stopifnot(start.time     <= max(samples$time))
+  stopifnot(start.event >= 1)
+  stopifnot(start.event <= nrow(fixations))
+  stopifnot(start.time  >= min(samples$time))
+  stopifnot(start.time  <= max(samples$time))
 
   if (is.null(start.time))
-    start.time <- fixations$start[start.fixation]
+    start.time <- fixations$start[start.event]
 
-  if (interactive) dev.new()
 
   par(mar=c(2,2,0,0))
   with(samples,   plot(time, x, pch=20, cex=0.3, col="red",
