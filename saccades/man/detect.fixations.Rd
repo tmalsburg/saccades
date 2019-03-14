@@ -52,6 +52,10 @@ frame has the following columns:
  \item{peak.vx}{the horizontal peak velocity that was reached within the fixation}
  \item{peak.vy}{the vertical peak velocity that was reached within the fixation}
  \item{dur}{the duration of the fixation}
+ \item{event}{the type of event, which could be 'fixation',
+  'blink', or artifacts which are labeled 'too dispersed' and 'too
+  short'.  Classification is based on simple heuristics that
+  identify outliers with respect to dispersion and duration.}
 }
 \description{
 Takes a data frame containing raw eye-tracking samples and returns a

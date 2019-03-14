@@ -104,6 +104,10 @@ NULL
 #'  \item{peak.vx}{the horizontal peak velocity that was reached within the fixation}
 #'  \item{peak.vy}{the vertical peak velocity that was reached within the fixation}
 #'  \item{dur}{the duration of the fixation}
+#'  \item{event}{the type of event, which could be 'fixation',
+#'   'blink', or artifacts which are labeled 'too dispersed' and 'too
+#'   short'.  Classification is based on simple heuristics that
+#'   identify outliers with respect to dispersion and duration.}
 #' @author Titus von der Malsburg \email{malsburg@@posteo.de}
 #' @references
 #' Ralf Engbert, Reinhold Kliegl: Microsaccades uncover the
@@ -146,11 +150,48 @@ detect.fixations <- function(samples, lambda=15, smooth.coordinates=FALSE, smoot
   
   if (all(!samples$saccade))
     stop("No saccades were detected.  Something went wrong.")
-  
+
   fixations <- aggregate.fixations(samples)
+
+  fixations$event <- label.blinks.artifacts(fixations)
   
   fixations
   
+}
+
+# EXPERIMENTAL: This function tries to detect blinks and artifacts
+# based on x- and y-dispersion and duration of fixations.
+label.blinks.artifacts <- function(fixations) {
+
+  # Blink and artifact detection based on dispersion:
+  lsdx <- log10(fixations$sd.x)
+  lsdy <- log10(fixations$sd.y)
+  median.lsdx <- median(lsdx, na.rm=TRUE)
+  median.lsdy <- median(lsdy, na.rm=TRUE)
+  mad.lsdx <- mad(lsdx, na.rm=TRUE)
+  mad.lsdy <- mad(lsdy, na.rm=TRUE)
+
+  # Dispersion too low -> blink:
+  threshold.lsdx <- median.lsdx - 4 * mad.lsdx
+  threshold.lsdy <- median.lsdy - 4 * mad.lsdy
+  event <- ifelse((lsdx < threshold.lsdx) & (lsdy < threshold.lsdy),
+                  "blink", "fixation")
+
+  # Dispersion too high -> artifact:
+  threshold.lsdx <- median.lsdx + 4 * mad.lsdx
+  threshold.lsdy <- median.lsdy + 4 * mad.lsdy
+  event <- ifelse(lsdx > threshold.lsdx & lsdy > threshold.lsdy,
+                  "too dispersed", event)
+
+  # Artifact detection based on duration:
+  # Duration too short -> artifact:
+  dur <- 1/fixations$dur
+  median.dur <- median(dur, na.rm=TRUE)
+  mad.dur <- mad(dur, na.rm=TRUE)
+  threshold.dur <- median.dur + mad.dur * 5
+  event <- ifelse(event!="blink" & dur > threshold.dur, "too short", event)
+
+  factor(event, levels=c("fixation", "blink", "too dispersed", "too short"))
 }
 
 # This function takes a data frame of the samples and aggregates the

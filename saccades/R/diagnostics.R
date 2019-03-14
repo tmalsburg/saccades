@@ -75,6 +75,15 @@ diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, 
     dev.off()
     zm(rp=p)
   }
+
+}
+
+# Pairs plot using fixation x- and y-dispersion and duration and color
+# for detected event type (black=fixation, red=blink, green=artifact).
+diagnostic.plot.event.types <- function(fixations) {
+  pairs( ~ log10(sd.x+0.001) + log10(sd.y+0.001) + log10(dur),
+        data=fixations,
+        col=fixations$event)
 }
 
 #' Calculates summary statistics about the trials and fixations in the
