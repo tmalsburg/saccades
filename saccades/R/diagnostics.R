@@ -41,33 +41,33 @@
 #' fixations <- detect.fixations(samples)
 #' diagnostic.plot(samples, fixations)
 #' }
-diagnostic.plot <- function(samples, fixations) {
+diagnostic.plot <- function(samples, fixations, start.fixation=1, start.time=NULL, duration=2000, interactive=TRUE) {
 
-  f <- fixations
-  n <- nrow(f)
-  m <- min(n, 20)
-  maxxy <- max(f[1:m,]$x, f[1:m,]$y)
-  minxy <- min(f[1:m,]$x, f[1:m,]$y)
-  gmaxxy <- max(samples$x, samples$y)
-  gminxy <- min(samples$x, samples$y)
-  
-  dev.new()
+  stopifnot(start.fixation >= 1)
+  stopifnot(start.fixation <= nrow(fixations))
+  stopifnot(start.time     >= min(samples$time))
+  stopifnot(start.time     <= max(samples$time))
+
+  if (is.null(start.time))
+    start.time <- fixations$start[start.fixation]
+
+  if (interactive) dev.new()
+
   par(mar=c(2,2,0,0))
-
-  with(samples, plot(time, x, pch=20, cex=0.3, col="red",
-                     ylim=c(minxy, maxxy),
-                     xlim=c(f$start[1], f$start[m])))
-  with(samples, points(time, y, pch=20, cex=0.3, col="orange"))
-  with(f, lines(zip(start, end, NA), rep(x,each=3)))
-  with(f, lines(zip(start, end, NA), rep(y,each=3)))
-  with(f, lines(zip(start, start, NA), rep(c(gminxy,gmaxxy,NA), n), col="lightgrey"))
-  with(f, lines(zip(end, end, NA), rep(c(gminxy,gmaxxy,NA), n), col="lightgrey"))
-
-  p <- recordPlot()
-  dev.off()
-
-  zm(rp=p)
+  with(samples,   plot(time, x, pch=20, cex=0.3, col="red",
+                       ylim=c(min(fixations$x, fixations$y),
+                              max(fixations$x, fixations$y)),
+                       xlim=c(start.time, start.time+duration)))
+  with(samples,   points(time, y, pch=20, cex=0.3, col="orange"))
+  with(fixations, lines(zip(start, end, NA), rep(x, each=3)))
+  with(fixations, lines(zip(start, end, NA), rep(y, each=3)))
+  with(fixations, abline(v=c(start, end), col="lightgrey"))
   
+  if (interactive) {
+    p <- recordPlot()
+    dev.off()
+    zm(rp=p)
+  }
 }
 
 #' Calculates summary statistics about the trials and fixations in the
