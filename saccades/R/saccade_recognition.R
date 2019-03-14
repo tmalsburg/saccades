@@ -124,7 +124,7 @@ NULL
 #' with(first.trial.samples, plot(x, y, pch=20, cex=0.2, col="red"))
 #' with(first.trial.fixations, points(x, y, cex=1+sqrt(dur/10000)))
 #' }
-detect.fixations <- function(samples, lambda=15, smooth.coordinates=T, smooth.saccades=T) {
+detect.fixations <- function(samples, lambda=15, smooth.coordinates=TRUE, smooth.saccades=TRUE) {
 
   # Discard unnecessary columns:
   samples <- samples[c("x", "y", "trial", "time")]
@@ -171,7 +171,7 @@ aggregate.fixations <- function(samples) {
   samples$fixation.id <- cumsum(saccade.events==-1|trial.events==1)
   
   # Discard samples that occurred during saccades:
-  samples <- samples[!samples$saccade,,drop=F]
+  samples <- samples[!samples$saccade,,drop=FALSE]
 
   fixations <- with(samples, data.frame(
     trial   = tapply(trial, fixation.id, function(x) x[1]),
@@ -183,7 +183,7 @@ aggregate.fixations <- function(samples) {
     sd.y    = tapply(y,     fixation.id, sd),
     peak.vx = tapply(vx,    fixation.id, function(x) x[which.max(abs(x))]),
     peak.vy = tapply(vy,    fixation.id, function(x) x[which.max(abs(x))]),
-    stringsAsFactors=F))
+    stringsAsFactors=FALSE))
 
   fixations$dur <- fixations$end - fixations$start
   
@@ -213,8 +213,8 @@ detect.saccades <- function(samples, lambda, smooth.saccades) {
   vx[length(vx)] <- vx[length(vx)-1]
   vy[length(vy)] <- vy[length(vy)-1]
 
-  msdx <- sqrt(median(vx**2, na.rm=T) - median(vx, na.rm=T)**2)
-  msdy <- sqrt(median(vy**2, na.rm=T) - median(vy, na.rm=T)**2)
+  msdx <- sqrt(median(vx**2, na.rm=TRUE) - median(vx, na.rm=TRUE)**2)
+  msdy <- sqrt(median(vy**2, na.rm=TRUE) - median(vy, na.rm=TRUE)**2)
 
   radiusx <- msdx * lambda
   radiusy <- msdy * lambda
@@ -224,7 +224,7 @@ detect.saccades <- function(samples, lambda, smooth.saccades) {
     sacc <- stats::filter(sacc, rep(1/3, 3))
     sacc <- as.logical(round(sacc))
   }
-  samples$saccade <- ifelse(is.na(sacc), F, sacc)
+  samples$saccade <- ifelse(is.na(sacc), FALSE, sacc)
   samples$vx <- vx
   samples$vy <- vy
 
