@@ -158,7 +158,7 @@ Other non-fixation events are artifacts.  The most common type are spurious micr
 
 Another type of artifact are events with a dispersion that is at least four median absolute deviations higher than the median dispersion.  These tend to happen rarely and primarily with very low quality data.
 
-** Tweaking event detection to produce good results
+** Tweaking event detection
 The default setting work well with high-frequency data from current research-grade eye-trackers such as SMI’s IViewX system and SR Research’s EyeLink systems.  Playing with the parameters that can make sense when the data is low quality (noisy, lots of track loss) or sampled at frequencies below (200Hz).  The following parameters can be changes:
 
 - ~lambda~ :: specifies which multiple of the standard deviation of the velocity distribution should be used as the detection threshold.  The default setting of 15 is recommended in Engbert & Kliegl (Vision Research, 2003).
