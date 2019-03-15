@@ -48,7 +48,7 @@
 #' fixations <- detect.fixations(samples)
 #' diagnostic.plot(samples, fixations)
 #' }
-diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, duration=2000, interactive=TRUE) {
+diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, duration=2000, interactive=TRUE, ...) {
 
   stopifnot(start.event >= 1)
   stopifnot(start.event <= nrow(fixations))
@@ -61,10 +61,14 @@ diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, 
   if (interactive) grDevices::dev.new()
 
   graphics::par(mar=c(2,2,0,0))
-  with(samples,   plot(time, x, pch=20, cex=0.3, col="red",
-                       ylim=c(min(fixations$x, fixations$y),
-                              max(fixations$x, fixations$y)),
-                       xlim=c(start.time, start.time+duration)))
+  if ("ylim" %in% list(...))
+    with(samples,   plot(time, x, pch=20, cex=0.3, col="red",
+                         ylim=c(min(fixations$x, fixations$y),
+                                max(fixations$x, fixations$y)),
+                         xlim=c(start.time, start.time+duration)))
+  else
+    with(samples,   plot(time, x, pch=20, cex=0.3, col="red",
+                         xlim=c(start.time, start.time+duration), ...))
   with(samples,   points(time, y, pch=20, cex=0.3, col="orange"))
   with(fixations, lines(zip(start, end, NA), rep(x, each=3)))
   with(fixations, lines(zip(start, end, NA), rep(y, each=3)))
