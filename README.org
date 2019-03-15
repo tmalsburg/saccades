@@ -67,7 +67,7 @@ head(samples)
 
 A plot showing the raw samples of the 10 trials:
 
-#+BEGIN_SRC R :exports both :results output graphics :file plots/zl9JSz.png :width 1000 :height 800 :res 125
+#+BEGIN_SRC R :exports both :results output graphics :file plots/zl9JSz.png :width 1000 :height 500 :res 125
 library(tidyverse)
 
 ggplot(samples, aes(x, y)) +
