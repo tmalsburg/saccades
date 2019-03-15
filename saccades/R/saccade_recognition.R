@@ -99,8 +99,8 @@ NULL
 #'  \item{end}{the time at which the fixation ended}
 #'  \item{x}{the x-coordinate of the fixation}
 #'  \item{y}{the y-coordinate of the fixation}
-#'  \item{sd.x}{the standard deviation of the sample x-coordinates within the fixation}
-#'  \item{sd.y}{the standard deviation of the sample y-coordinates within the fixation}
+#'  \item{mad.x}{the standard deviation of the sample x-coordinates within the fixation}
+#'  \item{mad.y}{the standard deviation of the sample y-coordinates within the fixation}
 #'  \item{peak.vx}{the horizontal peak velocity that was reached within the fixation}
 #'  \item{peak.vy}{the vertical peak velocity that was reached within the fixation}
 #'  \item{dur}{the duration of the fixation}
@@ -164,8 +164,8 @@ detect.fixations <- function(samples, lambda=15, smooth.coordinates=FALSE, smoot
 label.blinks.artifacts <- function(fixations) {
 
   # Blink and artifact detection based on dispersion:
-  lsdx <- log10(fixations$sd.x)
-  lsdy <- log10(fixations$sd.y)
+  lsdx <- log10(fixations$mad.x)
+  lsdy <- log10(fixations$mad.y)
   median.lsdx <- stats::median(lsdx, na.rm=TRUE)
   median.lsdy <- stats::median(lsdy, na.rm=TRUE)
   mad.lsdx <- stats::mad(lsdx, na.rm=TRUE)
@@ -224,10 +224,10 @@ aggregate.fixations <- function(samples) {
     trial   = tapply(trial, fixation.id, function(x) x[1]),
     start   = tapply(time,  fixation.id, min),
     end     = tapply(t2,    fixation.id, function(x) max(x, na.rm=TRUE)),
-    x       = tapply(x,     fixation.id, mean),
-    y       = tapply(y,     fixation.id, mean),
-    sd.x    = tapply(x,     fixation.id, sd),
-    sd.y    = tapply(y,     fixation.id, sd),
+    x       = tapply(x,     fixation.id, stats::median),
+    y       = tapply(y,     fixation.id, stats::median),
+    mad.x   = tapply(x,     fixation.id, stats::mad),
+    mad.y   = tapply(y,     fixation.id, stats::mad),
     peak.vx = tapply(vx,    fixation.id, function(x) x[which.max(abs(x))]),
     peak.vy = tapply(vy,    fixation.id, function(x) x[which.max(abs(x))]),
     stringsAsFactors=FALSE))

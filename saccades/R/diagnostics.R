@@ -82,7 +82,7 @@ diagnostic.plot <- function(samples, fixations, start.event=1, start.time=NULL, 
 # for detected event type (black=fixation, red=blink, blue=too short,
 # green=too dispersed).
 diagnostic.plot.event.types <- function(fixations) {
-  graphics::pairs( ~ log10(sd.x+0.001) + log10(sd.y+0.001) + log10(dur),
+  graphics::pairs( ~ log10(mad.x+0.001) + log10(mad.y+0.001) + log10(dur),
         data=fixations,
         col=fixations$event)
 }
@@ -127,8 +127,8 @@ calculate.summary <- function(fixations) {
   stats["No. of fixations per trial",] <- c(mean(n), stats::sd(n))
   stats["Duration of fixations",] <- c(mean(fixations$dur), stats::sd(fixations$dur))
 
-  stats["Dispersion horizontal",] <- c(mean(fixations$sd.x, na.rm=T), stats::sd(fixations$sd.x, na.rm=T))
-  stats["Dispersion vertical",]   <- c(mean(fixations$sd.y, na.rm=T), stats::sd(fixations$sd.y, na.rm=T))
+  stats["Dispersion horizontal",] <- c(mean(fixations$mad.x, na.rm=TRUE), stats::sd(fixations$mad.x, na.rm=TRUE))
+  stats["Dispersion vertical",]   <- c(mean(fixations$mad.y, na.rm=TRUE), stats::sd(fixations$mad.y, na.rm=TRUE))
           
   stats["Peak velocity horizontal",] <- c(mean(fixations$peak.vx, na.rm=T), stats::sd(fixations$peak.vx, na.rm=T))
   stats["Peak velocity vertical",]   <- c(mean(fixations$peak.vy, na.rm=T), stats::sd(fixations$peak.vy, na.rm=T))
