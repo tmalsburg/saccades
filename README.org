@@ -67,7 +67,7 @@ head(samples)
 
 A plot showing the raw samples of the 10 trials:
 
-#+BEGIN_SRC R :exports both :results output graphics :file plots/zl9JSz.pdf :width 7 :height 4
+#+BEGIN_SRC R :exports both :results output graphics :file plots/zl9JSz.png :width 1000 :height 800 :res 200
 library(tidyverse)
 
 ggplot(samples, aes(x, y)) +
@@ -77,7 +77,7 @@ ggplot(samples, aes(x, y)) +
 #+END_SRC
 
 #+RESULTS:
-[[file:plots/zl9JSz.pdf]]
+[[file:plots/zl9JSz.png]]
 
 *** Detection of eye movement events
 The function ~detect.fixations~ detects eye movement events during which the eyes were stationary.  These are primarily fixations, but also include blinks and artifacts (false positives produced by the velocity-based algorithm).
@@ -117,12 +117,12 @@ Called as above, the function will open an interactive plot showing the original
 
 Non-interactive plots can be produced by setting the parameter ~interactive~ to ~FALSE~.  Additional arguments (e.g., ~ylim~ are passed through to the ~plot~ function.
 
-#+BEGIN_SRC R :exports both :results output graphics :file plots/2GxXsD.pdf :width 7 :height 4
+#+BEGIN_SRC R :exports both :results output graphics :file plots/2GxXsD.png :width 1000 :height 600 :res 200
 diagnostic.plot(samples, fixations, start.time=2000, duration=10000, interactive=FALSE, ylim=c(0,1000))
 #+END_SRC
 
 #+RESULTS:
-[[file:plots/2GxXsD.pdf]]
+[[file:plots/2GxXsD.png]]
 
 The dots are the raw samples.  Red dots represent the x-coordinate and orange the y-coordinate.  The vertical lines mark the on- and offsets of fixations.  The horizontal lines (difficult to see in the plot above) represent the fixations.
 
@@ -147,12 +147,12 @@ round(stats, digits=2)
 ** Blinks and artifacts
 Blinks are fairly easy to spot (see graph below).  It starts with something that looks like a saccade, then there's a fixation on the coordinates (0,0) and with zero dispersion, and then there’s another saccade.  In this data set samples on coordinates (0,0) indicate track loss.  In data from EyeLink systems, 1e+08 is used for track loss.  So the heuristic for blinks used in this package is: anything that looks like a fixation but has much lower dispersion than the typical fixation.  Specifically, a blink is an event with a dispersion that is smaller than the median dispersion minus four times the median absolute deviation of the dispersion and only if this is the case for horizontal and vertical dispersion.
 
-#+BEGIN_SRC R :exports both :results output graphics :file plots/YGr5KW.pdf :width 7 :height 4
+#+BEGIN_SRC R :exports both :results output graphics :file plots/YGr5KW.png :width 1000 :height 600 :res 200
 diagnostic.plot(samples, fixations, start.time=235800, duration=900, interactive=FALSE, ylim=c(0,1000))
 #+END_SRC
 
 #+RESULTS:
-[[file:plots/YGr5KW.pdf]]
+[[file:plots/YGr5KW.png]]
 
 Other non-fixation events are artifacts.  The most common type are spurious micro fixations that are detected between the main sweep of the saccade and the swing back (a.k.a. glissade or j-hook) at the end of saccades.  During this time the velocity momentarily drops below the threshold for saccade detection which results in the detection of an event.  This is particularly likely to happen in high-frequency data, i.e. 1KHz and more but can also happen at lower frequencies.  These artifacts are detected when the duration of the event is at least five median absolute deviations shorter than the median of all events.
 
