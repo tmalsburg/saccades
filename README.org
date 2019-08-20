@@ -4,6 +4,7 @@
 
 * Saccade and Fixation Detection in R
 ** News
+- 08/20/2019: Changed the default value of ~lambda~ parameter from 15 to 6 which is the value recommended by Engbert & Kliegl (2003).  Note that there is no single generally correct or optimal value.  When in doubt, compare different values of ~lambda~ and see what works best for your data and application.
 - 03/15/2019: New features:
   - Heuristics for blink and artifact detection.
   - More options for the function producing diagnostic plots.
@@ -161,7 +162,7 @@ Another type of artifact are events with a dispersion that is at least four medi
 ** Tweaking event detection
 The default setting work well with high-frequency data from current research-grade eye-trackers such as SMI’s IViewX system and SR Research’s EyeLink system.  Playing with the parameters can make sense when the data is low quality (noisy, excessive track loss) or sampled at frequencies below (200Hz).  The following parameters can be changed:
 
-- ~lambda~ :: specifies which multiple of the standard deviation of the velocity distribution should be used as the detection threshold.  The default setting of 15 is recommended in Engbert & Kliegl (Vision Research, 2003).
+- ~lambda~ :: specifies which multiple of the standard deviation of the velocity distribution should be used as the detection threshold.  The default setting of 6 is recommended in Engbert & Kliegl (Vision Research, 2003).
 - ~smooth.coordinates~ :: logical indicating whether x- and y-coordinates should be smoothed using a moving average with window size 3 prior to saccade detection.  Can be useful when the data is very noisy (low precision).  With high-quality data setting this to true hurts more than it helps because it slightly lowers the precision of the on- and off-sets of events.
 - ~smooth.saccades~ :: logical.  If ~TRUE~, consecutive saccades separated by only one sample will be joined.  This can avoid detection of micro fixations before swing-backs.  Whether this works well, depends on the sampling rate of the eye-tracker.  If it’s high, say higher than 500Hz, most gaps between the main sweep and the swing-back become too large to be affected by this setting.  Similarly this setting discards one-sample saccades.  Note that when the data is low-frequency this can have the consequence that most or even all saccades are discarded.
 

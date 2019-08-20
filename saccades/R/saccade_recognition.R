@@ -128,7 +128,7 @@ NULL
 #' with(first.trial.samples, plot(x, y, pch=20, cex=0.2, col="red"))
 #' with(first.trial.fixations, points(x, y, cex=1+sqrt(dur/10000)))
 #' }
-detect.fixations <- function(samples, lambda=15, smooth.coordinates=FALSE, smooth.saccades=TRUE) {
+detect.fixations <- function(samples, lambda=6, smooth.coordinates=FALSE, smooth.saccades=TRUE) {
 
   # Discard unnecessary columns:
   samples <- samples[c("x", "y", "trial", "time")]
