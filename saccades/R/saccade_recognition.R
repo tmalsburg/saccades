@@ -222,7 +222,12 @@ aggregate.fixations <- function(samples) {
   samples$t2 <- samples$time
   samples$t2 <- ifelse(trial.events==1, NA, samples$t2)
   samples$t2 <- samples$t2[2:(nrow(samples)+1)]
-  
+  # Set last t2 value in a trial to last time value to avoid -Inf dur
+  # and end values when the last event has just one sample (see #13 on
+  # Github).  May produce zero-duration events but zero simply is our
+  # most conservative guess in this case.
+  samples$t2 <- with(samples, ifelse(is.na(t2), time, t2))
+
   # Discard samples that occurred during saccades:
   samples <- samples[!samples$saccade,,drop=FALSE]
 
