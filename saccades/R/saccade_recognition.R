@@ -130,6 +130,12 @@ NULL
 #' }
 detect.fixations <- function(samples, lambda=6, smooth.coordinates=FALSE, smooth.saccades=TRUE) {
 
+  if (! all(c("x", "y", "trial", "time") %in% colnames(samples)))
+    stop("Input data frame needs columns 'x', 'y', 'trial', and 'time'.")
+
+  if (! all(with(samples, tapply(time, trial, function(x) all(diff(x) > 0)))))
+    stop("Samples need to be in chronological order within trial.")
+
   # Discard unnecessary columns:
   samples <- samples[c("x", "y", "trial", "time")]
 
